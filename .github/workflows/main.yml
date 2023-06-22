@@ -13,4 +13,12 @@ jobs:
           username: root
           password: ${{ secrets.PASSWORD }}
           port: 22
-          script: whoami
+          script: |
+            cd /root/tendencias-actions
+            git reset --hard
+            git pull origin master
+            go clean
+            go build
+            ls -l
+            systemctl restart webserver
+            systemctl status webserver
