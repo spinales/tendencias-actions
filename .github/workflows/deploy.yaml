@@ -20,41 +20,53 @@ jobs:
       - name: Test
         run: go test -v ./...
 
-      - name: update code in server
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-            cd /root/tendencias-actions
-            git reset --hard
-            git pull origin master
-          host: ${{ secrets.HOST }}
-          user: root
-          port: 22
-          Key: "${{secrets.SSH_KEY}}"
-          args: "-tt"
+      - name: Build
+        runs-on: ubuntu-latest
+        steps:
+          - name: executing remote ssh commands using password
+            uses: appleboy/ssh-action@v0.1.10
+            with:
+              host: ${{ secrets.HOST }}
+              username: root
+              password: ${{ secrets.PASSWORD }}
+              port: 22
+              script: whoami
 
-      - name: build code in server
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-            cd /root/tendencias-actions
-            go clean
-            go build 
-            ls -l
-          host: ${{ secrets.HOST }}
-          user: root
-          port: 22
-          Key: "${{secrets.SSH_KEY}}"
-          args: "-tt"
-
-      - name: restart app
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-            systemctl restart webserver
-            systemctl status webserver
-          host: ${{ secrets.HOST }}
-          user: root
-          port: 22
-          Key: "${{secrets.SSH_KEY}}"
-          args: "-tt"
+#      - name: update code in server
+#        uses: fifsky/ssh-action@master
+#        with:
+#          command: |
+#            cd /root/tendencias-actions
+#            git reset --hard
+#            git pull origin master
+#          host: ${{ secrets.HOST }}
+#          user: root
+#          port: 22
+#          Key: "${{secrets.SSH_KEY}}"
+#          args: "-tt"
+#
+#      - name: build code in server
+#        uses: fifsky/ssh-action@master
+#        with:
+#          command: |
+#            cd /root/tendencias-actions
+#            go clean
+#            go build
+#            ls -l
+#          host: ${{ secrets.HOST }}
+#          user: root
+#          port: 22
+#          Key: "${{secrets.SSH_KEY}}"
+#          args: "-tt"
+#
+#      - name: restart app
+#        uses: fifsky/ssh-action@master
+#        with:
+#          command: |
+#            systemctl restart webserver
+#            systemctl status webserver
+#          host: ${{ secrets.HOST }}
+#          user: root
+#          port: 22
+#          Key: "${{secrets.SSH_KEY}}"
+#          args: "-tt"
