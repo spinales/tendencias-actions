@@ -21,7 +21,7 @@ jobs:
         run: go test -v ./...
 
       - name: Build
-        runs-on: ubuntu-latest
+#        runs-on: ubuntu-latest
         steps:
           - name: executing remote ssh commands using password
             uses: appleboy/ssh-action@v0.1.10
